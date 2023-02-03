@@ -1,5 +1,11 @@
 # 12 SQL: Employee Tracker
 
+Each review has only one movie (review has the foreign key)
+set movie_id in review
+
+Each department can have multiple roles and each role can have multiple departments
+Each employee has only one role, but each roll can have multiple employees
+
 /\*`
 I WANT to be able to view and manage the departments, roles, and employees in my company
 

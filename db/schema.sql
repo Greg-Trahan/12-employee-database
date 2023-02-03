@@ -3,7 +3,7 @@ CREATE DATABASE company_db;
 
 USE company_db;
 
-CREATE TABLE departmart (
+CREATE TABLE department (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(30) NOT NULL
 );
@@ -12,9 +12,9 @@ CREATE TABLE role(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(30) NOT NULL,
   salary DECIMAL,
-  departmart_id INT
-  FOREIGN KEY (departmart_id)
-    REFERENCES departmart(id)
+  department_id INT,
+  FOREIGN KEY (department_id)
+    REFERENCES department(id)
   ON DELETE SET NULL
 );
 
@@ -22,7 +22,8 @@ CREATE TABLE employee(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
-  manager_id INT
+  manager_id INT,
+  role_id INT,
 
   FOREIGN KEY (role_id)
     REFERENCES role(id)
@@ -31,7 +32,7 @@ CREATE TABLE employee(
   FOREIGN KEY (manager_id)
     REFERENCES employee(id)
   ON DELETE SET NULL
-)
+);
 
 
 INSERT INTO department (name)
@@ -39,7 +40,7 @@ INSERT INTO department (name)
         ("Chemistry"),
         ("English");
 
-INSERT INTO role (title, salary, departmart_id)
+INSERT INTO role (title, salary, department_id)
   VALUES ("Intern", 5000, 1),
         ("Engineer", 20000, 1),
        ("Manager", 30000, 3);
