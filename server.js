@@ -71,7 +71,7 @@ async function start() {
 function viewAllDepartments() {
   db.query("SELECT * FROM department", (err, results) => {
     if (err) {
-      res.status(500).json({ error: err.message });
+      console.error({ error: err.message });
       return;
     } else {
       console.table("Departments", results);
@@ -82,7 +82,7 @@ function viewAllDepartments() {
 function viewAllRoles() {
   db.query("SELECT * FROM role", (err, results) => {
     if (err) {
-      res.status(500).json({ error: err.message });
+      console.error({ error: err.message });
       return;
     } else {
       console.table("Roles", results);
@@ -93,7 +93,7 @@ function viewAllRoles() {
 function viewAllEmployees() {
   db.query("SELECT * FROM employee", (err, results) => {
     if (err) {
-      res.status(500).json({ error: err.message });
+      console.error({ error: err.message });
       return;
     } else {
       console.table("Employees", results);
@@ -101,12 +101,64 @@ function viewAllEmployees() {
   });
 }
 
-function addDepartment() {}
+async function addDepartment() {
+  await inquirer
+    .prompt({
+      type: "text",
+      message: "What is the name of the department?",
+      name: "name",
+    })
+    .then((response) => {
+      console.log(response.name);
+      db.query(
+        `INSERT INTO department (name) VALUES (?)`,
+        response.name,
+        (err, results) => {
+          if (err) {
+            console.error({ error: err.message });
+            return;
+          }
+        }
+      );
+    });
+}
 
-function addRole() {}
+async function addRole() {
+  await inquirer
+    .prompt(
+      {
+        type: "text",
+        message: "What is the name of the role?",
+        name: "name",
+      },
+      {
+        type: "text",
+        message: "What is the salary?",
+        name: "salary",
+      },
+      {
+        type: "text",
+        message: "Waht is the ID of its department?",
+        name: "deptID",
+      }
+    )
+    .then((response) => {
+      console.log(response.name);
+      db.query(
+        `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`,
+        [response.name, response.salary, response.deptID],
+        (err, results) => {
+          if (err) {
+            console.error({ error: err.message });
+            return;
+          }
+        }
+      );
+    });
+}
 
-function addEmployee() {}
+async function addEmployee() {}
 
-function updateEmployee() {}
+async function updateEmployee() {}
 
 start();
