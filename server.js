@@ -76,7 +76,7 @@ function viewAllDepartments() {
     } else {
       console.table("Departments", results);
     }
-    process.exit();
+    start();
   });
 }
 
@@ -90,7 +90,7 @@ function viewAllRoles() {
       } else {
         console.table("Roles", results);
       }
-      process.exit();
+      start();
     }
   );
 }
@@ -105,7 +105,7 @@ async function viewAllEmployees() {
       } else {
         console.table("Employees", results);
       }
-      process.exit();
+      start();
     }
   );
 }
@@ -130,7 +130,7 @@ async function addDepartment() {
         }
       );
     });
-  process.exit();
+  start();
 }
 
 async function addRole() {
@@ -164,7 +164,7 @@ async function addRole() {
         }
       );
     });
-  process.exit();
+  start();
 }
 
 async function addEmployee() {
@@ -203,7 +203,7 @@ async function addEmployee() {
         }
       );
     });
-  process.exit();
+  start();
 }
 
 async function updateEmployee() {
@@ -243,7 +243,7 @@ async function updateEmployee() {
                   }
                 }
               );
-              process.exit();
+              start();
             });
           break;
         case "Last Name":
@@ -266,7 +266,7 @@ async function updateEmployee() {
                   }
                 }
               );
-              process.exit();
+              start();
             });
           break;
         case "Role":
@@ -289,7 +289,7 @@ async function updateEmployee() {
                   }
                 }
               );
-              process.exit();
+              start();
             });
           break;
         case "Manager":
@@ -312,7 +312,7 @@ async function updateEmployee() {
                   }
                 }
               );
-              process.exit();
+              start();
             });
           break;
       }
