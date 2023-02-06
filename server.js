@@ -33,7 +33,7 @@ async function start() {
           "Add a department",
           "Add a role",
           "Add an employee",
-          "Update an employee role",
+          "Update an employee",
           "Quit",
         ],
         name: "answer",
@@ -59,7 +59,7 @@ async function start() {
         case "Add an employee":
           addEmployee();
           break;
-        case "Update an employee role":
+        case "Update an employee":
           updateEmployee();
           break;
         case "Quit":
@@ -81,27 +81,33 @@ function viewAllDepartments() {
 }
 
 function viewAllRoles() {
-  db.query("SELECT * FROM role", (err, results) => {
-    if (err) {
-      console.error({ error: err.message });
-      return;
-    } else {
-      console.table("Roles", results);
+  db.query(
+    "SELECT * FROM role JOIN department ON role.department_id = department.id",
+    (err, results) => {
+      if (err) {
+        console.error({ error: err.message });
+        return;
+      } else {
+        console.table("Roles", results);
+      }
+      process.exit();
     }
-    process.exit();
-  });
+  );
 }
 
 async function viewAllEmployees() {
-  db.query("SELECT * FROM employee", (err, results) => {
-    if (err) {
-      console.error({ error: err.message });
-      return;
-    } else {
-      console.table("Employees", results);
+  db.query(
+    "SELECT * FROM employee JOIN role ON employee.role_id = role.id",
+    (err, results) => {
+      if (err) {
+        console.error({ error: err.message });
+        return;
+      } else {
+        console.table("Employees", results);
+      }
+      process.exit();
     }
-    process.exit();
-  });
+  );
 }
 
 async function addDepartment() {
@@ -114,7 +120,7 @@ async function addDepartment() {
     .then((response) => {
       console.log(response.name);
       db.query(
-        `INSERT INTO department (name) VALUES (?)`,
+        `INSERT INTO department (dept_name) VALUES (?)`,
         response.name,
         (err, results) => {
           if (err) {
@@ -187,8 +193,8 @@ async function addEmployee() {
     ])
     .then((response) => {
       db.query(
-        `INSERT INTO role (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
-        [response.first, response.last, response.roleID, managerID],
+        `INSERT INTO employee (first_name, last_name, manager_id, role_id) VALUES (?, ?, ?, ?)`,
+        [response.first, response.last, response.managerID, response.roleID],
         (err, results) => {
           if (err) {
             console.error({ error: err.message });
@@ -237,6 +243,7 @@ async function updateEmployee() {
                   }
                 }
               );
+              process.exit();
             });
           break;
         case "Last Name":
@@ -259,6 +266,7 @@ async function updateEmployee() {
                   }
                 }
               );
+              process.exit();
             });
           break;
         case "Role":
@@ -281,6 +289,7 @@ async function updateEmployee() {
                   }
                 }
               );
+              process.exit();
             });
           break;
         case "Manager":
@@ -303,6 +312,7 @@ async function updateEmployee() {
                   }
                 }
               );
+              process.exit();
             });
           break;
       }
