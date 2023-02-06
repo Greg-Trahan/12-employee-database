@@ -76,6 +76,7 @@ function viewAllDepartments() {
     } else {
       console.table("Departments", results);
     }
+    process.exit();
   });
 }
 
@@ -87,10 +88,11 @@ function viewAllRoles() {
     } else {
       console.table("Roles", results);
     }
+    process.exit();
   });
 }
 
-function viewAllEmployees() {
+async function viewAllEmployees() {
   db.query("SELECT * FROM employee", (err, results) => {
     if (err) {
       console.error({ error: err.message });
@@ -98,6 +100,7 @@ function viewAllEmployees() {
     } else {
       console.table("Employees", results);
     }
+    process.exit();
   });
 }
 
@@ -121,11 +124,12 @@ async function addDepartment() {
         }
       );
     });
+  process.exit();
 }
 
 async function addRole() {
   await inquirer
-    .prompt(
+    .prompt([
       {
         type: "text",
         message: "What is the name of the role?",
@@ -140,10 +144,9 @@ async function addRole() {
         type: "text",
         message: "Waht is the ID of its department?",
         name: "deptID",
-      }
-    )
+      },
+    ])
     .then((response) => {
-      console.log(response.name);
       db.query(
         `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`,
         [response.name, response.salary, response.deptID],
@@ -155,10 +158,155 @@ async function addRole() {
         }
       );
     });
+  process.exit();
 }
 
-async function addEmployee() {}
+async function addEmployee() {
+  await inquirer
+    .prompt([
+      {
+        type: "text",
+        message: "What is the employees first name?",
+        name: "first",
+      },
+      {
+        type: "text",
+        message: "What is the employees last name?",
+        name: "last",
+      },
+      {
+        type: "text",
+        message: "What is the ID of thier role?",
+        name: "roleID",
+      },
+      {
+        type: "text",
+        message: "What is the ID of thier manager?",
+        name: "managerID",
+      },
+    ])
+    .then((response) => {
+      db.query(
+        `INSERT INTO role (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
+        [response.first, response.last, response.roleID, managerID],
+        (err, results) => {
+          if (err) {
+            console.error({ error: err.message });
+            return;
+          }
+        }
+      );
+    });
+  process.exit();
+}
 
-async function updateEmployee() {}
+async function updateEmployee() {
+  await inquirer
+    .prompt([
+      {
+        type: "text",
+        message: "What is the id of the employee you wish to update?",
+        name: "id",
+      },
+      {
+        type: "list",
+        message: "What would you like to update?",
+        choices: ["First Name", "Last Name", "Role", "Manager"],
+        name: "change",
+      },
+    ])
+    .then((response) => {
+      switch (response.change) {
+        case "First Name":
+          inquirer
+            .prompt([
+              {
+                type: "text",
+                message: "What is thier new first name?",
+                name: "name",
+              },
+            ])
+            .then((answer) => {
+              db.query(
+                "UPDATE employee SET first_name = ? WHERE id = ?",
+                [answer.name, response.id],
+                (err, results) => {
+                  if (err) {
+                    console.error({ error: err.message });
+                    return;
+                  }
+                }
+              );
+            });
+          break;
+        case "Last Name":
+          inquirer
+            .prompt([
+              {
+                type: "text",
+                message: "What is thier new last name?",
+                name: "name",
+              },
+            ])
+            .then((answer) => {
+              db.query(
+                "UPDATE employee SET last_name = ? WHERE id = ?",
+                [answer.name, response.id],
+                (err, results) => {
+                  if (err) {
+                    console.error({ error: err.message });
+                    return;
+                  }
+                }
+              );
+            });
+          break;
+        case "Role":
+          inquirer
+            .prompt([
+              {
+                type: "text",
+                message: "What is the ID of thier new role?",
+                name: "roleId",
+              },
+            ])
+            .then((answer) => {
+              db.query(
+                "UPDATE employee SET role_id = ? WHERE id = ?",
+                [answer.roleId, response.id],
+                (err, results) => {
+                  if (err) {
+                    console.error({ error: err.message });
+                    return;
+                  }
+                }
+              );
+            });
+          break;
+        case "Manager":
+          inquirer
+            .prompt([
+              {
+                type: "text",
+                message: "What is the id of thier new manager?",
+                name: "managerId",
+              },
+            ])
+            .then((answer) => {
+              db.query(
+                "UPDATE employee SET manager_id = ? WHERE id = ?",
+                [answer.managerId, response.id],
+                (err, results) => {
+                  if (err) {
+                    console.error({ error: err.message });
+                    return;
+                  }
+                }
+              );
+            });
+          break;
+      }
+    });
+}
 
 start();
