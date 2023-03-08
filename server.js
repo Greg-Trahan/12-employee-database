@@ -148,7 +148,7 @@ async function addRole() {
       },
       {
         type: "text",
-        message: "Waht is the ID of its department?",
+        message: "Waht is the ID of the department it is in?",
         name: "deptID",
       },
     ])
