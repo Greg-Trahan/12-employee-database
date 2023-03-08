@@ -1,7 +1,6 @@
-# 10 Object-Oriented Programming: Team Profile Generator
+# 12 Employee Database
 
-Name: Greg Trahan  
-Due: 05FEB2023
+Name: Greg Trahan
 
 Click [here](https://github.com/Greg-Trahan/12-employee-database) to see my final project.
 
